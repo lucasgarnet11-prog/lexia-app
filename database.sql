@@ -1,77 +1,47 @@
 -- ================================================
--- BASE DE DATOS PARA LEXIA - VERSION SEGURA
--- Elimina y recrea todo de forma segura
+-- BASE DE DATOS PARA LEXIA
+-- Aplicación de gestión legal para abogados argentinos
 -- ================================================
 
 -- ================================================
--- ELIMINAR POLÍTICAS EXISTENTES (si las hay)
+-- TABLA: perfiles
+-- Almacena información de usuarios registrados
 -- ================================================
-DROP POLICY IF EXISTS "usuarios_pueden_ver_propio_perfil" ON perfiles;
-DROP POLICY IF EXISTS "usuarios_pueden_actualizar_propio_perfil" ON perfiles;
-DROP POLICY IF EXISTS "usuarios_pueden_insertar_propio_perfil" ON perfiles;
-DROP POLICY IF EXISTS "usuarios_pueden_ver_sus_expedientes" ON expedientes;
-DROP POLICY IF EXISTS "usuarios_pueden_crear_expedientes" ON expedientes;
-DROP POLICY IF EXISTS "usuarios_pueden_actualizar_sus_expedientes" ON expedientes;
-DROP POLICY IF EXISTS "usuarios_pueden_eliminar_sus_expedientes" ON expedientes;
-DROP POLICY IF EXISTS "usuarios_pueden_ver_sus_clientes" ON clientes;
-DROP POLICY IF EXISTS "usuarios_pueden_crear_clientes" ON clientes;
-DROP POLICY IF EXISTS "usuarios_pueden_actualizar_sus_clientes" ON clientes;
-DROP POLICY IF EXISTS "usuarios_pueden_eliminar_sus_clientes" ON clientes;
-DROP POLICY IF EXISTS "usuarios_pueden_ver_sus_audiencias" ON audiencias;
-DROP POLICY IF EXISTS "usuarios_pueden_crear_audiencias" ON audiencias;
-DROP POLICY IF EXISTS "usuarios_pueden_actualizar_sus_audiencias" ON audiencias;
-DROP POLICY IF EXISTS "usuarios_pueden_eliminar_sus_audiencias" ON audiencias;
-DROP POLICY IF EXISTS "usuarios_pueden_ver_sus_documentos" ON documentos;
-DROP POLICY IF EXISTS "usuarios_pueden_crear_documentos" ON documentos;
-DROP POLICY IF EXISTS "usuarios_pueden_eliminar_sus_documentos" ON documentos;
-DROP POLICY IF EXISTS "usuarios_pueden_ver_sus_archivos" ON archivos;
-DROP POLICY IF EXISTS "usuarios_pueden_crear_archivos" ON archivos;
-DROP POLICY IF EXISTS "usuarios_pueden_eliminar_sus_archivos" ON archivos;
-
--- ================================================
--- ELIMINAR TABLAS EXISTENTES (si las hay)
--- ================================================
-DROP TABLE IF EXISTS archivos CASCADE;
-DROP TABLE IF EXISTS documentos CASCADE;
-DROP TABLE IF EXISTS audiencias CASCADE;
-DROP TABLE IF EXISTS expedientes CASCADE;
-DROP TABLE IF EXISTS clientes CASCADE;
-DROP TABLE IF EXISTS perfiles CASCADE;
-
--- ================================================
--- CREAR TABLAS
--- ================================================
-
--- Tabla de perfiles
-CREATE TABLE perfiles (
+CREATE TABLE IF NOT EXISTS perfiles (
     id UUID REFERENCES auth.users(id) PRIMARY KEY,
     email TEXT UNIQUE NOT NULL,
     nombre TEXT NOT NULL,
-    matricula TEXT,
-    trial_end TIMESTAMP WITH TIME ZONE NOT NULL,
-    suscripto BOOLEAN DEFAULT FALSE,
-    subscription_date TIMESTAMP WITH TIME ZONE,
+    matricula TEXT, -- Matrícula profesional del abogado
+    trial_end TIMESTAMP WITH TIME ZONE NOT NULL, -- Fin del período de prueba
+    suscripto BOOLEAN DEFAULT FALSE, -- Si tiene suscripción activa
+    subscription_date TIMESTAMP WITH TIME ZONE, -- Fecha de inicio de suscripción
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Tabla de expedientes
-CREATE TABLE expedientes (
+-- ================================================
+-- TABLA: expedientes
+-- Gestión de expedientes judiciales
+-- ================================================
+CREATE TABLE IF NOT EXISTS expedientes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES perfiles(id) ON DELETE CASCADE NOT NULL,
-    numero TEXT,
-    caratula TEXT NOT NULL,
-    tipo TEXT NOT NULL,
-    juzgado TEXT,
-    cliente_id UUID,
-    estado TEXT DEFAULT 'activo',
-    fecha_inicio DATE,
-    descripcion TEXT,
+    numero TEXT, -- Número de expediente (ej: 1234/2024)
+    caratula TEXT NOT NULL, -- Carátula del expediente
+    tipo TEXT NOT NULL, -- laboral, civil, comercial, familia, penal, administrativo
+    juzgado TEXT, -- Juzgado donde tramita
+    cliente_id UUID, -- Referencia al cliente (sin FK estricta por ahora)
+    estado TEXT DEFAULT 'activo', -- activo, archivado, finalizado
+    fecha_inicio DATE, -- Fecha de inicio del expediente
+    descripcion TEXT, -- Descripción del caso
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Tabla de clientes
-CREATE TABLE clientes (
+-- ================================================
+-- TABLA: clientes
+-- Gestión de clientes del estudio
+-- ================================================
+CREATE TABLE IF NOT EXISTS clientes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES perfiles(id) ON DELETE CASCADE NOT NULL,
     nombre TEXT NOT NULL,
@@ -79,52 +49,62 @@ CREATE TABLE clientes (
     email TEXT,
     telefono TEXT,
     domicilio TEXT,
-    notas TEXT,
+    notas TEXT, -- Notas adicionales sobre el cliente
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Tabla de audiencias
-CREATE TABLE audiencias (
+-- ================================================
+-- TABLA: audiencias
+-- Calendario de audiencias y eventos judiciales
+-- ================================================
+CREATE TABLE IF NOT EXISTS audiencias (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES perfiles(id) ON DELETE CASCADE NOT NULL,
     expediente_id UUID REFERENCES expedientes(id) ON DELETE CASCADE,
     titulo TEXT NOT NULL,
     fecha TIMESTAMP WITH TIME ZONE NOT NULL,
-    lugar TEXT,
-    tipo TEXT,
+    lugar TEXT, -- Ubicación de la audiencia
+    tipo TEXT, -- audiencia, vencimiento, notificación, etc.
     notas TEXT,
     recordatorio_enviado BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Tabla de documentos
-CREATE TABLE documentos (
+-- ================================================
+-- TABLA: documentos
+-- Documentos generados por IA (escritos, contratos, etc.)
+-- ================================================
+CREATE TABLE IF NOT EXISTS documentos (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID REFERENCES perfiles(id) ON DELETE CASCADE NOT NULL,
     expediente_id UUID REFERENCES expedientes(id) ON DELETE SET NULL,
-    tipo TEXT NOT NULL,
+    tipo TEXT NOT NULL, -- escrito, contrato, carta_documento, estrategia
     titulo TEXT NOT NULL,
     contenido TEXT NOT NULL,
-    metadata JSONB,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Tabla de archivos
-CREATE TABLE archivos (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID REFERENCES perfiles(id) ON DELETE CASCADE NOT NULL,
-    expediente_id UUID REFERENCES expedientes(id) ON DELETE CASCADE,
-    nombre TEXT NOT NULL,
-    tipo TEXT NOT NULL,
-    ruta TEXT NOT NULL,
-    tamano INTEGER,
-    analizado BOOLEAN DEFAULT FALSE,
+    metadata JSONB, -- Información adicional en formato JSON
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- ================================================
--- HABILITAR ROW LEVEL SECURITY
+-- TABLA: archivos
+-- Almacenamiento de referencias a archivos (PDFs, etc.)
+-- ================================================
+CREATE TABLE IF NOT EXISTS archivos (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES perfiles(id) ON DELETE CASCADE NOT NULL,
+    expediente_id UUID REFERENCES expedientes(id) ON DELETE CASCADE,
+    nombre TEXT NOT NULL,
+    tipo TEXT NOT NULL, -- pdf, docx, jpg, etc.
+    ruta TEXT NOT NULL, -- Ruta en Supabase Storage
+    tamano INTEGER, -- Tamaño en bytes
+    analizado BOOLEAN DEFAULT FALSE, -- Si ya fue analizado por IA
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================================
+-- HABILITAR ROW LEVEL SECURITY (RLS)
+-- Cada usuario solo puede ver sus propios datos
 -- ================================================
 ALTER TABLE perfiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE expedientes ENABLE ROW LEVEL SECURITY;
@@ -136,14 +116,17 @@ ALTER TABLE archivos ENABLE ROW LEVEL SECURITY;
 -- ================================================
 -- POLÍTICAS DE SEGURIDAD - PERFILES
 -- ================================================
+-- Los usuarios pueden ver su propio perfil
 CREATE POLICY "usuarios_pueden_ver_propio_perfil"
     ON perfiles FOR SELECT
     USING (auth.uid() = id);
 
+-- Los usuarios pueden actualizar su propio perfil
 CREATE POLICY "usuarios_pueden_actualizar_propio_perfil"
     ON perfiles FOR UPDATE
     USING (auth.uid() = id);
 
+-- Los usuarios pueden insertar su propio perfil (para registro)
 CREATE POLICY "usuarios_pueden_insertar_propio_perfil"
     ON perfiles FOR INSERT
     WITH CHECK (auth.uid() = id);
@@ -247,8 +230,10 @@ CREATE INDEX IF NOT EXISTS idx_documentos_user_id ON documentos(user_id);
 CREATE INDEX IF NOT EXISTS idx_archivos_user_id ON archivos(user_id);
 
 -- ================================================
--- FUNCIÓN PARA ACTUALIZAR updated_at
+-- FUNCIONES ÚTILES
 -- ================================================
+
+-- Función para actualizar automáticamente updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -257,24 +242,66 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- ================================================
--- TRIGGERS
--- ================================================
-DROP TRIGGER IF EXISTS update_expedientes_updated_at ON expedientes;
+-- Trigger para expedientes
 CREATE TRIGGER update_expedientes_updated_at
     BEFORE UPDATE ON expedientes
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
-DROP TRIGGER IF EXISTS update_clientes_updated_at ON clientes;
+-- Trigger para clientes
 CREATE TRIGGER update_clientes_updated_at
     BEFORE UPDATE ON clientes
     FOR EACH ROW
     EXECUTE FUNCTION update_updated_at_column();
 
 -- ================================================
+-- STORAGE BUCKET PARA ARCHIVOS
+-- ================================================
+-- Ejecutar esto manualmente en Supabase Dashboard > Storage
+-- O usando el siguiente SQL:
+
+-- Crear bucket para archivos de usuarios
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('user-files', 'user-files', false)
+ON CONFLICT DO NOTHING;
+
+-- Política de storage: los usuarios pueden ver sus archivos
+CREATE POLICY "Los usuarios pueden ver sus archivos"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'user-files' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+-- Política de storage: los usuarios pueden subir archivos
+CREATE POLICY "Los usuarios pueden subir archivos"
+ON storage.objects FOR INSERT
+WITH CHECK (bucket_id = 'user-files' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+-- Política de storage: los usuarios pueden eliminar sus archivos
+CREATE POLICY "Los usuarios pueden eliminar sus archivos"
+ON storage.objects FOR DELETE
+USING (bucket_id = 'user-files' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+-- ================================================
+-- DATOS DE PRUEBA (OPCIONAL - SOLO DESARROLLO)
+-- ================================================
+-- Descomentar solo si quieres datos de prueba
+
+/*
+-- Insertar un perfil de prueba (después de crear el usuario en Auth)
+INSERT INTO perfiles (id, email, nombre, matricula, trial_end, suscripto)
+VALUES (
+    'UUID-DEL-USUARIO', -- Reemplazar con UUID real del usuario
+    'test@lexia.com.ar',
+    'Abogado de Prueba',
+    'T° 123 F° 456',
+    NOW() + INTERVAL '7 days',
+    false
+);
+*/
+
+-- ================================================
 -- VERIFICACIÓN
 -- ================================================
+-- Verifica que todo se haya creado correctamente
 SELECT 
     'perfiles' as tabla,
     COUNT(*) as registros
@@ -289,3 +316,14 @@ UNION ALL
 SELECT 'documentos', COUNT(*) FROM documentos
 UNION ALL
 SELECT 'archivos', COUNT(*) FROM archivos;
+
+-- ================================================
+-- FIN DEL SCRIPT
+-- ================================================
+
+-- NOTAS IMPORTANTES:
+-- 1. Este script es idempotente (puede ejecutarse múltiples veces)
+-- 2. Las políticas RLS garantizan que cada usuario solo vea sus datos
+-- 3. Los índices mejoran el rendimiento de consultas frecuentes
+-- 4. El trigger updated_at mantiene fechas de modificación actualizadas
+-- 5. Storage policies permiten subir y gestionar archivos de forma segura

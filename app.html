@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexIA - Dashboard</title>
+    <link rel="stylesheet" href="styles/app.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Auth Screens -->
+    <div id="authScreen" class="auth-container">
+        <!-- Login -->
+        <div id="loginForm" class="auth-card">
+            <div class="auth-header">
+                <div class="logo-large">
+                    <svg width="60" height="60" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#gradient1)"/>
+                        <path d="M12 28V12H16V24H24V28H12Z" fill="white"/>
+                        <path d="M26 12H30V28H26V12Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="gradient1" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" style="stop-color:#6366f1"/>
+                                <stop offset="100%" style="stop-color:#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <h1>LexIA</h1>
+                </div>
+                <p class="auth-subtitle">Ingresa a tu cuenta</p>
+            </div>
+            <form id="loginFormElement" class="auth-form">
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="loginEmail" placeholder="tu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Iniciar sesión</button>
+                <div class="auth-links">
+                    <a href="#" id="showRegister">¿No tienes cuenta? Regístrate</a>
+                    <a href="#" id="showResetPassword">Olvidé mi contraseña</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Register -->
+        <div id="registerForm" class="auth-card" style="display: none;">
+            <div class="auth-header">
+                <div class="logo-large">
+                    <svg width="60" height="60" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#gradient2)"/>
+                        <path d="M12 28V12H16V24H24V28H12Z" fill="white"/>
+                        <path d="M26 12H30V28H26V12Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="gradient2" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" style="stop-color:#6366f1"/>
+                                <stop offset="100%" style="stop-color:#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <h1>LexIA</h1>
+                </div>
+                <p class="auth-subtitle">Comienza tu prueba gratuita de 7 días</p>
+            </div>
+            <form id="registerFormElement" class="auth-form">
+                <div class="form-group">
+                    <label>Nombre completo</label>
+                    <input type="text" id="registerName" placeholder="Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="registerEmail" placeholder="tu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>Matrícula profesional (opcional)</label>
+                    <input type="text" id="registerMatricula" placeholder="Ej: T° 123 F° 456">
+                </div>
+                <button type="submit" class="btn-primary btn-block">Comenzar prueba gratuita</button>
+                <p class="trial-notice">
+                    ✓ 7 días gratis, sin tarjeta de crédito<br>
+                    ✓ Acceso completo a todas las funcionalidades
+                </p>
+                <div class="auth-links">
+                    <a href="#" id="showLogin">¿Ya tienes cuenta? Inicia sesión</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Reset Password -->
+        <div id="resetPasswordForm" class="auth-card" style="display: none;">
+            <div class="auth-header">
+                <div class="logo-large">
+                    <svg width="60" height="60" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#gradient3)"/>
+                        <path d="M12 28V12H16V24H24V28H12Z" fill="white"/>
+                        <path d="M26 12H30V28H26V12Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="gradient3" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" style="stop-color:#6366f1"/>
+                                <stop offset="100%" style="stop-color:#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <h1>LexIA</h1>
+                </div>
+                <p class="auth-subtitle">Recuperar contraseña</p>
+            </div>
+            <form id="resetPasswordFormElement" class="auth-form">
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input type="email" id="resetEmail" placeholder="tu@email.com" required>
+                </div>
+                <button type="submit" class="btn-primary btn-block">Enviar instrucciones</button>
+                <div class="auth-links">
+                    <a href="#" id="backToLogin">Volver al inicio de sesión</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#gradient4)"/>
+                        <path d="M12 28V12H16V24H24V28H12Z" fill="white"/>
+                        <path d="M26 12H30V28H26V12Z" fill="white"/>
+                        <defs>
+                            <linearGradient id="gradient4" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" style="stop-color:#6366f1"/>
+                                <stop offset="100%" style="stop-color:#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>LexIA</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="expedientes">
+                    <span class="nav-icon">📂</span>
+                    <span>Expedientes</span>
+                </a>
+                <a href="#" class="nav-item" data-section="clientes">
+                    <span class="nav-icon">👥</span>
+                    <span>Clientes</span>
+                </a>
+                <a href="#" class="nav-item" data-section="analisis">
+                    <span class="nav-icon">🔍</span>
+                    <span>Análisis de PDFs</span>
+                </a>
+                <a href="#" class="nav-item" data-section="estrategia">
+                    <span class="nav-icon">⚖️</span>
+                    <span>Estrategia</span>
+                </a>
+                <a href="#" class="nav-item" data-section="escritos">
+                    <span class="nav-icon">✍️</span>
+                    <span>Escritos Judiciales</span>
+                </a>
+                <a href="#" class="nav-item" data-section="agenda">
+                    <span class="nav-icon">📅</span>
+                    <span>Agenda</span>
+                </a>
+                <a href="#" class="nav-item" data-section="cartas">
+                    <span class="nav-icon">📨</span>
+                    <span>Cartas Documento</span>
+                </a>
+                <a href="#" class="nav-item" data-section="contratos">
+                    <span class="nav-icon">📄</span>
+                    <span>Contratos</span>
+                </a>
+                <a href="#" class="nav-item" data-section="calculadora">
+                    <span class="nav-icon">💰</span>
+                    <span>Calculadora Legal</span>
+                </a>
+                <a href="#" class="nav-item" data-section="casos">
+                    <span class="nav-icon">🎓</span>
+                    <span>Casos Prácticos</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <span id="userInitials">JP</span>
+                    </div>
+                    <div class="user-details">
+                        <p class="user-name" id="userName">Juan Pérez</p>
+                        <p class="user-plan" id="userPlan">Prueba gratuita</p>
+                    </div>
+                </div>
+                <button class="btn-icon" id="btnLogout" title="Cerrar sesión">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M8 15L3 10L8 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M3 10H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M10 3H16C16.5523 3 17 3.44772 17 4V16C17 16.5523 16.5523 17 16 17H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboardSection" class="content-section active">
+                <div class="section-header">
+                    <h1>Dashboard</h1>
+                    <div id="trialBanner" class="trial-banner">
+                        <span>⏰ Te quedan <strong id="daysLeft">7 días</strong> de prueba gratuita</span>
+                        <button class="btn-primary btn-sm" id="btnSubscribe">Suscribirme ahora</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📂</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Expedientes activos</p>
+                            <p class="stat-value" id="statExpedientes">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Clientes</p>
+                            <p class="stat-value" id="statClientes">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Audiencias próximas</p>
+                            <p class="stat-value" id="statAudiencias">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✍️</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Escritos generados</p>
+                            <p class="stat-value" id="statEscritos">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="quick-actions">
+                        <h2>Acciones rápidas</h2>
+                        <div class="actions-grid">
+                            <button class="action-card" data-section="expedientes">
+                                <span class="action-icon">📂</span>
+                                <span class="action-text">Nuevo expediente</span>
+                            </button>
+                            <button class="action-card" data-section="clientes">
+                                <span class="action-icon">👥</span>
+                                <span class="action-text">Nuevo cliente</span>
+                            </button>
+                            <button class="action-card" data-section="analisis">
+                                <span class="action-icon">🔍</span>
+                                <span class="action-text">Analizar PDF</span>
+                            </button>
+                            <button class="action-card" data-section="escritos">
+                                <span class="action-icon">✍️</span>
+                                <span class="action-text">Redactar escrito</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h2>Actividad reciente</h2>
+                        <div id="activityList" class="activity-list">
+                            <div class="empty-state">
+                                <span class="empty-icon">📋</span>
+                                <p>Aún no tienes actividad</p>
+                                <p class="empty-subtitle">Comienza creando un expediente o cliente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expedientes Section -->
+            <section id="expedientesSection" class="content-section">
+                <div class="section-header">
+                    <h1>Gestión de Expedientes</h1>
+                    <button class="btn-primary" id="btnNuevoExpediente">
+                        <span>+</span> Nuevo expediente
+                    </button>
+                </div>
+
+                <div id="expedientesList" class="data-table">
+                    <!-- Tabla de expedientes se cargará dinámicamente -->
+                </div>
+            </section>
+
+            <!-- Clientes Section -->
+            <section id="clientesSection" class="content-section">
+                <div class="section-header">
+                    <h1>Gestión de Clientes</h1>
+                    <button class="btn-primary" id="btnNuevoCliente">
+                        <span>+</span> Nuevo cliente
+                    </button>
+                </div>
+
+                <div id="clientesList" class="data-table">
+                    <!-- Tabla de clientes se cargará dinámicamente -->
+                </div>
+            </section>
+
+            <!-- Análisis Section -->
+            <section id="analisisSection" class="content-section">
+                <div class="section-header">
+                    <h1>Análisis de PDFs con IA</h1>
+                </div>
+
+                <div class="upload-zone" id="pdfUploadZone">
+                    <svg class="upload-icon" width="64" height="64" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 15V3M12 3L8 7M12 3L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M2 17L2 19C2 20.1046 2.89543 21 4 21L20 21C21.1046 21 22 20.1046 22 19L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <h3>Arrastra tu expediente PDF aquí</h3>
+                    <p>o haz clic para seleccionar un archivo</p>
+                    <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;">
+                    <button class="btn-secondary" id="btnSelectPDF">Seleccionar archivo</button>
+                </div>
+
+                <div id="analisisResult" class="analysis-result" style="display: none;">
+                    <!-- Resultado del análisis -->
+                </div>
+            </section>
+
+            <!-- Estrategia Section -->
+            <section id="estrategiaSection" class="content-section">
+                <div class="section-header">
+                    <h1>Estrategia Procesal</h1>
+                </div>
+
+                <div class="strategy-form">
+                    <div class="form-group">
+                        <label>Selecciona un expediente</label>
+                        <select id="estrategiaExpediente" class="form-select">
+                            <option value="">Seleccionar expediente...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de estrategia</label>
+                        <select id="estrategiaTipo" class="form-select">
+                            <option value="general">Análisis estratégico general</option>
+                            <option value="defensiva">Estrategia defensiva</option>
+                            <option value="ofensiva">Estrategia ofensiva</option>
+                            <option value="negociacion">Estrategia de negociación</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Contexto adicional (opcional)</label>
+                        <textarea id="estrategiaContexto" rows="4" placeholder="Agrega información relevante que pueda ayudar a generar una mejor estrategia..."></textarea>
+                    </div>
+                    <button class="btn-primary" id="btnGenerarEstrategia">Generar estrategia</button>
+                </div>
+
+                <div id="estrategiaResult" class="strategy-result" style="display: none;">
+                    <!-- Resultado de la estrategia -->
+                </div>
+            </section>
+
+            <!-- Escritos Section -->
+            <section id="escritosSection" class="content-section">
+                <div class="section-header">
+                    <h1>Redacción de Escritos Judiciales</h1>
+                </div>
+
+                <div class="escritos-form">
+                    <div class="form-group">
+                        <label>Tipo de escrito</label>
+                        <select id="escritoTipo" class="form-select">
+                            <option value="">Seleccionar tipo...</option>
+                            <option value="demanda">Demanda</option>
+                            <option value="contestacion">Contestación de demanda</option>
+                            <option value="recurso_apelacion">Recurso de apelación</option>
+                            <option value="recurso_revocatoria">Recurso de revocatoria</option>
+                            <option value="alegato">Alegato</option>
+                            <option value="memorial">Memorial</option>
+                            <option value="escrito_prueba">Ofrecimiento de prueba</option>
+                            <option value="incidente">Incidente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Expediente relacionado (opcional)</label>
+                        <select id="escritoExpediente" class="form-select">
+                            <option value="">Sin expediente asociado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Detalles del escrito</label>
+                        <textarea id="escritoDetalles" rows="6" placeholder="Describe los hechos, fundamentos y peticiones que debe contener el escrito..."></textarea>
+                    </div>
+                    <button class="btn-primary" id="btnGenerarEscrito">Generar escrito</button>
+                </div>
+
+                <div id="escritoResult" class="document-result" style="display: none;">
+                    <!-- Resultado del escrito -->
+                </div>
+            </section>
+
+            <!-- Agenda Section -->
+            <section id="agendaSection" class="content-section">
+                <div class="section-header">
+                    <h1>Agenda de Audiencias</h1>
+                    <button class="btn-primary" id="btnNuevaAudiencia">
+                        <span>+</span> Nueva audiencia
+                    </button>
+                </div>
+
+                <div id="calendar" class="calendar">
+                    <!-- Calendario se cargará dinámicamente -->
+                </div>
+
+                <div id="audienciasList" class="audiencias-list">
+                    <!-- Lista de audiencias -->
+                </div>
+            </section>
+
+            <!-- Cartas Section -->
+            <section id="cartasSection" class="content-section">
+                <div class="section-header">
+                    <h1>Redacción de Cartas Documento</h1>
+                </div>
+
+                <div class="cartas-form">
+                    <div class="form-group">
+                        <label>Destinatario</label>
+                        <input type="text" id="cartaDestinatario" placeholder="Nombre del destinatario">
+                    </div>
+                    <div class="form-group">
+                        <label>Domicilio del destinatario</label>
+                        <input type="text" id="cartaDomicilio" placeholder="Dirección completa">
+                    </div>
+                    <div class="form-group">
+                        <label>Motivo de la carta</label>
+                        <select id="cartaMotivo" class="form-select">
+                            <option value="">Seleccionar motivo...</option>
+                            <option value="intimacion_pago">Intimación de pago</option>
+                            <option value="rescision_contrato">Rescisión de contrato</option>
+                            <option value="notificacion_despido">Notificación de despido</option>
+                            <option value="reclamo_daños">Reclamo por daños</option>
+                            <option value="intimacion_cumplimiento">Intimación de cumplimiento</option>
+                            <option value="otro">Otro motivo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Contenido de la carta</label>
+                        <textarea id="cartaContenido" rows="6" placeholder="Describe los hechos, antecedentes y lo que se requiere del destinatario..."></textarea>
+                    </div>
+                    <button class="btn-primary" id="btnGenerarCarta">Generar carta documento</button>
+                </div>
+
+                <div id="cartaResult" class="document-result" style="display: none;">
+                    <!-- Resultado de la carta -->
+                </div>
+            </section>
+
+            <!-- Contratos Section -->
+            <section id="contratosSection" class="content-section">
+                <div class="section-header">
+                    <h1>Redacción de Contratos</h1>
+                </div>
+
+                <div class="contratos-form">
+                    <div class="form-group">
+                        <label>Tipo de contrato</label>
+                        <select id="contratoTipo" class="form-select">
+                            <option value="">Seleccionar tipo...</option>
+                            <option value="compraventa">Compraventa</option>
+                            <option value="locacion">Locación</option>
+                            <option value="trabajo">Contrato de trabajo</option>
+                            <option value="servicios">Prestación de servicios</option>
+                            <option value="mutuo">Mutuo</option>
+                            <option value="comodato">Comodato</option>
+                            <option value="donacion">Donación</option>
+                            <option value="sociedad">Contrato de sociedad</option>
+                            <option value="mandato">Mandato</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Partes del contrato</label>
+                        <textarea id="contratoPartes" rows="3" placeholder="Ejemplo: Parte A: Juan Pérez, DNI 12345678&#10;Parte B: María González, DNI 87654321"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Cláusulas y condiciones</label>
+                        <textarea id="contratoClausulas" rows="6" placeholder="Describe las condiciones específicas, plazos, obligaciones de las partes, forma de pago, etc."></textarea>
+                    </div>
+                    <button class="btn-primary" id="btnGenerarContrato">Generar contrato</button>
+                </div>
+
+                <div id="contratoResult" class="document-result" style="display: none;">
+                    <!-- Resultado del contrato -->
+                </div>
+            </section>
+
+            <!-- Calculadora Section -->
+            <section id="calculadoraSection" class="content-section">
+                <div class="section-header">
+                    <h1>Calculadora Legal</h1>
+                </div>
+
+                <div class="calculator-tabs">
+                    <button class="calc-tab active" data-calc="indemnizacion">Indemnización LCT</button>
+                    <button class="calc-tab" data-calc="alimentos">Cuota alimentaria</button>
+                    <button class="calc-tab" data-calc="accidente">Accidente laboral (LRT)</button>
+                </div>
+
+                <!-- Calculadora Indemnización -->
+                <div id="calcIndemnizacion" class="calculator-form active">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha de ingreso</label>
+                            <input type="date" id="fechaIngreso">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de egreso</label>
+                            <input type="date" id="fechaEgreso">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Mejor remuneración mensual</label>
+                            <input type="number" id="remuneracion" placeholder="$">
+                        </div>
+                        <div class="form-group">
+                            <label>Tipo de despido</label>
+                            <select id="tipoDespido" class="form-select">
+                                <option value="sin_causa">Sin causa</option>
+                                <option value="por_causa">Por causa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-primary" id="btnCalcularIndemnizacion">Calcular</button>
+                    <div id="resultIndemnizacion" class="calc-result" style="display: none;"></div>
+                </div>
+
+                <!-- Calculadora Alimentos -->
+                <div id="calcAlimentos" class="calculator-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ingresos del alimentante</label>
+                            <input type="number" id="ingresosAlimentante" placeholder="$">
+                        </div>
+                        <div class="form-group">
+                            <label>Cantidad de hijos</label>
+                            <input type="number" id="cantidadHijos" min="1" value="1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Gastos estimados mensuales del menor</label>
+                        <input type="number" id="gastosHijo" placeholder="$">
+                    </div>
+                    <button class="btn-primary" id="btnCalcularAlimentos">Calcular</button>
+                    <div id="resultAlimentos" class="calc-result" style="display: none;"></div>
+                </div>
+
+                <!-- Calculadora Accidente -->
+                <div id="calcAccidente" class="calculator-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ingreso base mensual</label>
+                            <input type="number" id="ingresoBase" placeholder="$">
+                        </div>
+                        <div class="form-group">
+                            <label>Porcentaje de incapacidad (%)</label>
+                            <input type="number" id="incapacidad" min="0" max="100" placeholder="%">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Edad del trabajador</label>
+                        <input type="number" id="edadTrabajador" min="18" max="70">
+                    </div>
+                    <button class="btn-primary" id="btnCalcularAccidente">Calcular</button>
+                    <div id="resultAccidente" class="calc-result" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- Casos Prácticos Section -->
+            <section id="casosSection" class="content-section">
+                <div class="section-header">
+                    <h1>Casos Prácticos</h1>
+                </div>
+
+                <div class="casos-grid">
+                    <div class="caso-card" data-tipo="laboral">
+                        <div class="caso-icon">💼</div>
+                        <h3>Derecho Laboral</h3>
+                        <p>Practica con casos de despidos, indemnizaciones y conflictos laborales</p>
+                        <button class="btn-secondary">Iniciar caso</button>
+                    </div>
+                    <div class="caso-card" data-tipo="civil">
+                        <div class="caso-icon">⚖️</div>
+                        <h3>Derecho Civil</h3>
+                        <p>Casos de contratos, daños, responsabilidad civil y más</p>
+                        <button class="btn-secondary">Iniciar caso</button>
+                    </div>
+                    <div class="caso-card" data-tipo="familia">
+                        <div class="caso-icon">👨‍👩‍👧</div>
+                        <h3>Derecho de Familia</h3>
+                        <p>Alimentos, divorcio, régimen de visitas y tenencia</p>
+                        <button class="btn-secondary">Iniciar caso</button>
+                    </div>
+                    <div class="caso-card" data-tipo="comercial">
+                        <div class="caso-icon">🏢</div>
+                        <h3>Derecho Comercial</h3>
+                        <p>Sociedades, títulos de crédito y contratos comerciales</p>
+                        <button class="btn-secondary">Iniciar caso</button>
+                    </div>
+                </div>
+
+                <div id="casoActivo" class="caso-activo" style="display: none;">
+                    <!-- Caso práctico activo -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+    
+    <!-- Modal Suscripción -->
+    <div id="modalSuscripcion" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Suscríbete a LexIA</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="subscription-plan">
+                    <h3>Plan Profesional</h3>
+                    <div class="price-large">
+                        <span class="currency">$</span>
+                        <span class="amount">9.900</span>
+                        <span class="period">/mes</span>
+                    </div>
+                    <p class="price-note">Precio en pesos argentinos</p>
+                    <ul class="plan-features">
+                        <li>✓ Todas las funcionalidades</li>
+                        <li>✓ Expedientes y clientes ilimitados</li>
+                        <li>✓ Análisis con IA</li>
+                        <li>✓ Soporte prioritario</li>
+                    </ul>
+                    <button class="btn-primary btn-block" id="btnProcesarPago">Procesar pago con Mercado Pago</button>
+                    <p class="payment-note">Serás redirigido a Mercado Pago para completar el pago de forma segura</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+        <p>Procesando...</p>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/claude-ai.js"></script>
+    <script src="js/ui-extended.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
